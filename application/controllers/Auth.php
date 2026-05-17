@@ -45,7 +45,7 @@ class Auth extends CI_Controller {
 
         // 3. Jika keduanya gagal
         $this->session->set_flashdata('error', 'Username atau Password salah!');
-        redirect('auth');
+        redirect('auth/login');
     }
 
     public function logout() {

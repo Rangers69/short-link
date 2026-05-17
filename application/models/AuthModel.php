@@ -15,7 +15,7 @@ class AuthModel extends CI_Model {
     public function cek_admin($username, $password) {
         // Admin masih pakai MD5 sesuai setup awal kita
         $this->db->where('username', $username);
-        $this->db->where('password', md5($password));
+        $this->db->where('password', $password);
         return $this->db->get('admins')->row();
     }
 
