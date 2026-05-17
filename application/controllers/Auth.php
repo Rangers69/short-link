@@ -17,7 +17,7 @@ class Auth extends CI_Controller {
         $admin = $this->AuthModel->cek_admin($username, $password);
         if ($admin) {
             $sess_data = [
-                'id_user'   => $admin->id,
+                'admin_id'   => $admin->id,
                 'username'  => $admin->username,
                 'nama'      => $admin->nama_lengkap,
                 'role'      => 'admin', // Penanda Role
@@ -32,7 +32,7 @@ class Auth extends CI_Controller {
         $user = $this->AuthModel->cek_user($username);
         if ($user && password_verify($password, $user->password)) {
             $sess_data = [
-                'id_user'   => $user->id,
+                'user_id'   => $user->id,
                 'username'  => $user->username,
                 'nama'      => $user->nama_lengkap,
                 'role'      => 'user', // Penanda Role

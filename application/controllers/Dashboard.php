@@ -6,7 +6,7 @@ class Dashboard extends CI_Controller {
     public function __construct() {
         parent::__construct();
         // Memuat semua model yang dibutuhkan
-        $this->load->model(['User_model', 'Link_model', 'Stat_model']);
+        $this->load->model(['LinkModel', 'AffiliateModel', 'UserModel', 'StatModel']);
         
         // Proteksi Halaman: Pastikan user sudah login
         // Asumsi session 'user_id' diatur saat login
@@ -17,17 +17,27 @@ class Dashboard extends CI_Controller {
 
     // 1. HALAMAN UTAMA (Dashboard)
     public function index() {
+        // Pastikan session ID diambil dengan benar
         $user_id = $this->session->userdata('user_id');
         
-        $data['title'] = "Dashboard - ApemShortlink";
-        $data['summary'] = $this->Link_model->get_dashboard_summary($user_id);
-        $data['recent_links'] = $this->Link_model->get_user_links($user_id, null, null); 
-        // Ambil 5 terakhir saja untuk dashboard
-        $data['recent_links'] = array_slice($data['recent_links'], 0, 5);
+        $this->load->model('LinkModel');
 
-        $this->load->view('layout/header', $data);
-        $this->load->view('dashboard/index', $data);
-        $this->load->view('layout/footer');
+        // Ambil data (Model sekarang menjamin output array)
+        $all_links = $this->LinkModel->get_links_by_user($user_id);
+
+        // Siapkan data untuk dikirim ke view
+        $data['my_links']     = $all_links;
+        $data['total_links']  = count($all_links);
+        $data['total_clicks'] = 0;
+
+        foreach ($all_links as $l) {
+            $data['total_clicks'] += (int)$l['clicks'];
+        }
+
+        $data['title'] = "Dashboard - Bitlytic";
+       
+        // Load view
+        $this->load->view('public/dashboard/index', $data);
     }
 
     // 2. HALAMAN DAFTAR LINK (Link Saya)

@@ -55,6 +55,7 @@ $route['translate_uri_dashes'] = FALSE;
 
 // 2. DAFTARKAN CONTROLLER ASLI DI SINI (PENTING)
 // Agar kata 'admin', 'auth', dll tidak dianggap sebagai shortcode
+$route['dashboard'] = 'dashboard';
 $route['login'] = 'auth/login';
 $route['logout'] = 'auth/logout';
 $route['register'] = 'auth/register';

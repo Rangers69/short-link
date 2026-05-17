@@ -46,6 +46,16 @@ class LinkModel extends CI_Model {
         return $this->db->get_where('links', ['short_code' => $code])->row_array();
     }
 
+    public function get_links_by_user($user_id) {
+      
+        $this->db->where('user_id', $user_id);
+        $this->db->order_by('created_at', 'DESC');
+        $query = $this->db->get('links');
+        
+        // Kembalikan array kosong jika tidak ada data
+        return $query->num_rows() > 0 ? $query->result_array() : [];
+    }
+
     public function increment_clicks($id) {
         $this->db->set('clicks', 'clicks+1', FALSE);
         $this->db->where('id', $id);
