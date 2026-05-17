@@ -30,9 +30,40 @@
                 </div>
                 <span class="text-xl font-bold text-slate-900">Bit<span class="text-violet-600">lytic</span> Affiliate</span>
             </div>
-            <button onclick="openModal()" class="bg-violet-600 text-white px-5 py-2.5 rounded-xl font-bold hover:bg-violet-700 transition flex items-center gap-2 shadow-lg shadow-violet-100">
-                <span>+</span> Tambah Produk
-            </button>
+
+            <div class="flex items-center gap-6">
+               
+
+                <div class="h-8 w-[1px] bg-slate-200 hidden md:block"></div>
+
+                <div class="relative">
+                    <button onclick="toggleDropdown()" class="flex items-center gap-3 group focus:outline-none">
+                        <div class="text-right hidden md:block">
+                            <p class="text-sm font-bold text-slate-900 leading-none mb-1"><?= $this->session->userdata('nama'); ?></p>
+                            <p class="text-[10px] font-black text-violet-600 uppercase tracking-widest leading-none">Admin Control</p>
+                        </div>
+                        <div class="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center border-2 border-transparent group-hover:border-violet-200 transition-all overflow-hidden">
+                            <span class="text-violet-600 font-bold"><?= substr($this->session->userdata('nama'), 0, 1); ?></span>
+                        </div>
+                    </button>
+
+                    <div id="userDropdown" class="hidden absolute right-0 mt-3 w-56 bg-white rounded-2xl shadow-2xl border border-slate-100 overflow-hidden py-2 animate-bounce-short">
+                        <div class="px-4 py-3 border-b border-slate-50 md:hidden">
+                            <p class="text-sm font-bold text-slate-900"><?= $this->session->userdata('nama'); ?></p>
+                            <p class="text-[10px] text-slate-400 font-bold uppercase">Administrator</p>
+                        </div>
+                        <a href="#" class="flex items-center gap-3 px-4 py-3 text-sm font-bold text-slate-600 hover:bg-slate-50 hover:text-violet-600 transition">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                            Edit Profil
+                        </a>
+                        <div class="h-[1px] bg-slate-50 my-1"></div>
+                        <a href="<?= base_url('auth/logout'); ?>" class="flex items-center gap-3 px-4 py-3 text-sm font-bold text-red-500 hover:bg-red-50 transition">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                            Keluar
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
     </nav>
 
@@ -85,11 +116,19 @@
             </div>
         <?php endif; ?>
 
-        <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+        
+       <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
             <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
-                <h2 class="text-xl font-extrabold text-slate-900">Performa Produk Affiliate</h2>
-                <span class="px-4 py-1 bg-violet-100 text-violet-700 rounded-full text-xs font-bold uppercase">Update Real-time</span>
+                <div>
+                    <h2 class="text-xl font-extrabold text-slate-900">Performa Produk Affiliate</h2>
+                    <span class="px-4 py-1 bg-violet-100 text-violet-700 rounded-full text-[10px] font-bold uppercase mt-2 inline-block">Update Real-time</span>
+                </div>
+                
+                <button onclick="openModal()" class="bg-violet-600 text-white px-5 py-2.5 rounded-xl font-bold hover:bg-violet-700 transition flex items-center gap-2 shadow-lg shadow-violet-100">
+                    <span>+</span> <span class="hidden md:inline">Tambah Produk</span>
+                </button>
             </div>
+
             <div class="overflow-x-auto">
                 <table class="w-full text-left">
                     <thead>
@@ -161,6 +200,20 @@
     <script>
         function openModal() { document.getElementById('addModal').classList.remove('hidden'); }
         function closeModal() { document.getElementById('addModal').classList.add('hidden'); }
+        function toggleDropdown() {
+            const dropdown = document.getElementById('userDropdown');
+            dropdown.classList.toggle('hidden');
+        }
+
+        // Menutup dropdown jika klik di luar area profil
+        window.onclick = function(event) {
+            if (!event.target.closest('.relative')) {
+                const dropdown = document.getElementById('userDropdown');
+                if (!dropdown.classList.contains('hidden')) {
+                    dropdown.classList.add('hidden');
+                }
+            }
+        }
     </script>
 </body>
 </html>

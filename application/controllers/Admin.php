@@ -8,7 +8,15 @@ class Admin extends CI_Controller {
         $this->load->helper('url');
         $this->load->model('LinkModel');
         $this->load->model('AffiliateModel');
+
+        // Cek apakah session logged_in ada
+        if (!$this->session->userdata('logged_in')) {
+            $this->session->set_flashdata('error', 'Silakan login terlebih dahulu!');
+            redirect('auth');
+        }
     }
+
+    
 
     public function index() {
         $this->load->model('AffiliateModel');

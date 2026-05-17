@@ -55,6 +55,8 @@ $route['translate_uri_dashes'] = FALSE;
 
 // 2. DAFTARKAN CONTROLLER ASLI DI SINI (PENTING)
 // Agar kata 'admin', 'auth', dll tidak dianggap sebagai shortcode
+$route['login'] = 'auth/login';
+$route['logout'] = 'auth/logout';
 $route['admin/toggle_status/(:num)'] = 'admin/toggle_status/$1';
 $route['admin'] = 'admin'; 
 $route['admin/(.+)'] = 'admin/$1'; // Menangkap method di dalam controller admin
