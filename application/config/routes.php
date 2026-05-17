@@ -52,3 +52,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $route['default_controller'] = 'welcome';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
+
+// 2. DAFTARKAN CONTROLLER ASLI DI SINI (PENTING)
+// Agar kata 'admin', 'auth', dll tidak dianggap sebagai shortcode
+$route['admin/toggle_status/(:num)'] = 'admin/toggle_status/$1';
+$route['admin'] = 'admin'; 
+$route['admin/(.+)'] = 'admin/$1'; // Menangkap method di dalam controller admin
+$route['auth/(.+)'] = 'auth/$1';
+$route['link/(.+)'] = 'link/$1';
+
+// 3. ROUTE SHORTLINK HARUS PALING BAWAH
+// Menangkap 6 karakter alfanumerik sebagai shortcode
+$route['([a-zA-Z0-9]{6})'] = 'link/go/$1';
+
+// Atau jika shortcode kamu panjangnya bebas, gunakan ini tapi pastikan controller asli sudah di-exclude di atas:
+// $route['([a-zA-Z0-9_-]+)'] = 'link/go/$1';

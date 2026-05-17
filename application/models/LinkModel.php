@@ -42,4 +42,13 @@ class LinkModel extends CI_Model {
         $this->db->where('id', $link_id);
         return $this->db->update('links', ['status' => $status]);
     }
+    public function get_link_by_code($code) {
+        return $this->db->get_where('links', ['short_code' => $code])->row_array();
+    }
+
+    public function increment_clicks($id) {
+        $this->db->set('clicks', 'clicks+1', FALSE);
+        $this->db->where('id', $id);
+        $this->db->update('links');
+    }
 }

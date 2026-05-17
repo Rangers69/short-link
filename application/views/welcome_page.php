@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28' fill='none'><g transform='rotate(3 12 12)'><rect width='32' height='26' rx='6' fill='%237c3aed'/><path d='M17 7h8m0 0v8m0-8l-8 8-4-4-6 6' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/></g></svg>"> -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 28' fill='none'><g transform='rotate(3 12 12)'><rect width='25' height='25' rx='6' fill='%237c3aed'/><path d='M13 7h8m0 0v8m0-8l-8 8-4-4-6 6' stroke='white' stroke-width='2.8' stroke-linecap='round' stroke-linejoin='round'/></g></svg>">
     <title>Bitlytic - Smart Link Shortener & Analytics</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -21,6 +23,13 @@
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
+        }
+        @keyframes bounce-short {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+        .animate-bounce-short {
+            animation: bounce-short 0.5s ease-in-out;
         }
     </style>
 </head>
@@ -59,13 +68,36 @@
             <p class="text-xl text-violet-100 mb-12 max-w-3xl mx-auto leading-relaxed">
                 Bitlytic memberikan data presisi tentang siapa, kapan, dan di mana link kamu diklik dengan tampilan visual yang memukau.
             </p>
+
+            <?php if($this->session->flashdata('error')): ?>
+                <div id="errorAlert" class="max-w-2xl mx-auto mb-6 animate-bounce-short">
+                    <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded-2xl shadow-sm flex items-center gap-4">
+                        <div class="flex-shrink-0 w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
+                            <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                            </svg>
+                        </div>
+                        
+                        <div class="flex-1 text-left">
+                            <p class="text-xs font-bold text-red-800 uppercase tracking-wider">Terjadi Kesalahan</p>
+                            <p class="text-sm text-red-600 font-medium"><?php echo $this->session->flashdata('error'); ?></p>
+                        </div>
+
+                        <button onclick="document.getElementById('errorAlert').style.display='none'" class="text-red-400 hover:text-red-600 transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        </button>
+                    </div>
+                </div>
+            <?php endif; ?>
             
-            <div class="bg-white p-3 rounded-3xl shadow-2xl max-w-2xl mx-auto flex flex-col md:flex-row gap-3 border-4 border-violet-400/30">
-                <input type="text" placeholder="Masukkan link panjangmu..." class="flex-1 px-6 py-4 text-slate-800 focus:outline-none text-lg font-medium bg-transparent">
-                <button class="bg-violet-600 text-white px-10 py-4 rounded-2xl font-black text-lg hover:bg-violet-700 transition shadow-xl shadow-violet-300">
-                    Sikat!
-                </button>
-            </div>
+            <form action="<?php echo base_url('link/createPublic')?>" method="post">
+                <div class="bg-white p-3 rounded-3xl shadow-2xl max-w-2xl mx-auto flex flex-col md:flex-row gap-3 border-4 border-violet-400/30">
+                    <input type="text" placeholder="Masukkan link panjangmu..." name="link" class="flex-1 px-6 py-4 text-slate-800 focus:outline-none text-lg font-medium bg-transparent">
+                    <button class="bg-violet-600 text-white px-10 py-4 rounded-2xl font-black text-lg hover:bg-violet-700 transition shadow-xl shadow-violet-300">
+                        Sikat!
+                    </button>
+                </div>
+            </form>
         </div>
     </section>
 
@@ -144,3 +176,42 @@
 
 </body>
 </html>
+
+<?php if($this->session->flashdata('short_result')): ?>
+<div id="resultModal" class="fixed inset-0 z-[60] flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none">
+    <div class="fixed inset-0 bg-black opacity-50"></div>
+    <div class="relative w-full max-w-md mx-auto z-[70]">
+        <div class="bg-white rounded-3xl shadow-2xl p-8 text-center relative border-4 border-violet-100">
+            <div class="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+            </div>
+            <h3 class="text-2xl font-extrabold text-slate-900 mb-2">Link Berhasil Dipotong!</h3>
+            <p class="text-slate-500 mb-6">Sekarang kamu bisa membagikan link ini ke teman-temanmu.</p>
+            
+            <div class="flex items-center gap-2 bg-slate-50 p-2 rounded-2xl border border-slate-200 mb-6">
+                <input type="text" readonly value="<?php echo $this->session->flashdata('short_result'); ?>" id="shortlinkInput" class="flex-1 bg-transparent px-4 font-bold text-violet-600 focus:outline-none">
+                <button onclick="copyToClipboard()" class="bg-violet-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-violet-700 transition">Salin</button>
+            </div>
+
+            <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600 font-medium transition">Tutup Halaman</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function copyToClipboard() {
+        var copyText = document.getElementById("shortlinkInput");
+        copyText.select();
+        copyText.setSelectionRange(0, 99999); // Untuk mobile
+        navigator.clipboard.writeText(copyText.value);
+        
+        // Ganti teks tombol sementara
+        event.target.innerText = "Tersalin!";
+        setTimeout(() => { event.target.innerText = "Salin"; }, 2000);
+    }
+
+    function closeModal() {
+        document.getElementById("resultModal").classList.add("hidden");
+    }
+</script>
+<?php endif; ?>
