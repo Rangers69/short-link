@@ -42,6 +42,10 @@
                 <button type="submit" class="w-full bg-violet-600 hover:bg-violet-700 text-white py-4 rounded-2xl font-extrabold shadow-lg shadow-violet-200 transition-all hover:scale-[1.02] active:scale-95">
                     Masuk ke Dashboard
                 </button>
+
+                <p class="text-center text-sm text-slate-500 font-medium pt-2">
+                    Belum punya akun? <a href="<?= base_url('register') ?>" class="text-violet-600 font-bold hover:underline">Register</a>
+                </p>
             </form>
         </div>
         <p class="text-center text-slate-500 mt-8 text-sm font-medium">© 2026 Bitlytic • Sunset Edition</p>

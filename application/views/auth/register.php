@@ -49,7 +49,7 @@
                 </button>
 
                 <p class="text-center text-sm text-slate-500 font-medium pt-2">
-                    Sudah punya akun? <a href="<?= base_url('auth') ?>" class="text-violet-600 font-bold hover:underline">Login</a>
+                    Sudah punya akun? <a href="<?= base_url('login') ?>" class="text-violet-600 font-bold hover:underline">Login</a>
                 </p>
             </form>
         </div>
