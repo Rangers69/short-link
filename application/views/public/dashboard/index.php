@@ -17,6 +17,11 @@
         .animate-bounce-short {
             animation: bounce-short 0.5s ease-in-out;
         }
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.95) translateY(-20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .modal-animate { animation: modalIn 0.3s ease-out; }
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen">
@@ -82,12 +87,12 @@
                     <h3 class="text-2xl font-black text-slate-900"><?= isset($total_clicks) ? number_format($total_clicks) : 0; ?></h3>
                 </div>
             </div>
-            <div class="bg-violet-600 p-6 rounded-3xl shadow-xl shadow-violet-200 flex items-center justify-between text-white overflow-hidden relative group">
+            <div class="bg-violet-600 p-6 rounded-3xl shadow-xl shadow-violet-200 flex items-center justify-between text-white overflow-hidden relative group cursor-pointer" onclick="openModal()">
                 <div class="relative z-10">
                     <p class="text-xs font-bold text-violet-200 uppercase tracking-widest">Aksi Cepat</p>
-                    <a href="<?= base_url() ?>" class="mt-2 flex items-center gap-2 font-bold hover:gap-4 transition-all italic underline">
+                    <div class="mt-2 flex items-center gap-2 font-bold hover:gap-4 transition-all italic underline">
                         Buat Link Baru <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
-                    </a>
+                    </div>
                 </div>
                 <svg class="w-24 h-24 absolute -right-5 -bottom-5 text-white/10 rotate-12" fill="currentColor" viewBox="0 0 24 24"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
             </div>
@@ -149,6 +154,34 @@
             </div>
         </div>
     </main>
+    <!-- Modal Buat Link Baru -->
+<div id="createLinkModal" class="fixed inset-0 z-50 hidden" role="dialog">
+    <!-- Overlay -->
+    <div class="fixed inset-0 bg-black/50 backdrop-blur-sm" onclick="closeModal()"></div>
+    
+    <!-- Konten Modal -->
+    <div class="fixed inset-0 flex items-center justify-center p-4">
+            <div class="bg-white rounded-3xl shadow-2xl max-w-lg w-full modal-animate">
+                <!-- Header -->
+                <div class="p-6 border-b flex justify-between">
+                    <h3 class="text-xl font-extrabold">Buat Link Baru</h3>
+                    <button onclick="closeModal()" class="p-2 hover:bg-slate-100 rounded-xl">✕</button>
+                </div>
+                
+                <!-- Form -->
+                <form action="<?= base_url('link/createPublic') ?>" method="POST" class="p-6 space-y-4">
+                    <input type="url" name="original_url" placeholder="URL Asli *" required class="w-full p-3 border rounded-xl">
+                    <input type="text" name="custom_title" placeholder="Judul Kustom (opsional)" class="w-full p-3 border rounded-xl">
+                    <input type="text" name="short_code" placeholder="Kode Pendek (opsional)" class="w-full p-3 border rounded-xl">
+                    
+                    <div class="flex gap-3">
+                        <button type="button" onclick="closeModal()" class="flex-1 p-3 border rounded-xl">Batal</button>
+                        <button type="submit" class="flex-1 p-3 bg-violet-600 text-white rounded-xl">Buat Link</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <script>
         function toggleDropdown() {
@@ -169,6 +202,23 @@
                 }
             }
         }
+
+        function openModal() {
+            document.getElementById('createLinkModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('createLinkModal').classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        // Tutup modal dengan ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
     </script>
 </body>
 </html>

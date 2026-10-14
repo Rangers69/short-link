@@ -1,0 +1,11 @@
+.git
+.gitignore
+.vscode
+.idea
+node_modules
+*.log
+.DS_Store
+docker-compose.yml
+Dockerfile
+.dockerignore
+shortlink.sql
